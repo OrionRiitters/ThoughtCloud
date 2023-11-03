@@ -1,0 +1,13 @@
+{
+  "name": "wall-it-app",
+  "version": "1.0.0",
+  "description": "React app for Wall-It",
+  "main": "index.js",
+  "author": "Orion McCoy-Riitters",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "next": "^14.0.1",
+    "react-dom": "^18.2.0"
+  }
+}
