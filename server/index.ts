@@ -1,20 +1,26 @@
 import fastify from 'fastify'
 import { AddressInfo } from 'node:net'
+import Ajv from 'ajv'
 
 import process from 'node:process'
 
-import { getEmbeddings } from './services/openai'
-import { setEmbeddings } from './services/redis/client'
+import { getOpenAiEmbeddings } from './services/openai'
+import { putRequestSchema } from './util/typeValidation/userRequests/textToEmbeddings'
 
 const server = fastify({ logger: true })
+const ajv = new Ajv()
 
-server.get('/', async (request, reply) => {
-    return { hello: 'world' }
-});
+server.put('/embeddings', async(request, reply) => {
+    const validate = ajv.compile(putRequestSchema)
+    if (validate(request)) {
+        const embeddings = await getOpenAiEmbeddings(request.body.data)
+    } else {
+        return Promise.reject(new Error(`400 Bad Request at PUT /embeddings. AJV Error: ${validate.errors?.[0].message}`))
+    }
+})
 
-server.post('/embeddings', async(request, reply) => {
-    const embeddings = await getEmbeddings('ooflasdfn;oawiepaowieifnawepofiujawpoeijawoeif')
-    console.log('asd' + await setEmbeddings('ooflasdfn;oawiepaowieifnawepofiujawpoeijawoeif', embeddings))
+server.get('/embeddings', async(request, reply) => {
+    const embeddings = await getOpenAiEmbeddings('ooflasdfn;oawiepaowieifnawepofiujawpoeijawoeif')
 })
 
 const start = async () => {

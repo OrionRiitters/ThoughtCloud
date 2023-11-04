@@ -3,12 +3,9 @@ import assert from 'node:assert'
 import sinon from 'sinon'
 import axios from 'axios';
 
-import { getEmbeddings } from '../../../server/services/openai'
+import { getOpenAiEmbeddings } from '../../../server/services/openai'
 
 describe('getEmbeddings', async () => {
-
-    //after(() => sinon.restore())
-
     it('happy path', async () => {
         sinon.replace(axios, 'post', sinon.fake.resolves({
             data: {
@@ -20,9 +17,10 @@ describe('getEmbeddings', async () => {
             },
         }))
 
-      assert.deepEqual(await getEmbeddings('foo'), [1, 2, 3, 4, 5])
+      assert.deepEqual(await getOpenAiEmbeddings('foo'), [1, 2, 3, 4, 5])
       sinon.restore()
     })
+
     it ('throws error on invalid response', async () => {
         sinon.replace(axios, 'post', sinon.fake.resolves({
             data: {
@@ -33,7 +31,8 @@ describe('getEmbeddings', async () => {
                 ],
             },
         }))
-      assert.rejects(() => getEmbeddings('foo'))
+
+      assert.rejects(() => getOpenAiEmbeddings('foo'))
       sinon.restore()
-    } )
+    })
   });

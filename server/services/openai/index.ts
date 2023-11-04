@@ -1,10 +1,12 @@
 import axios from 'axios'
 import 'dotenv/config'
+import Ajv from 'ajv'
 
-import { validateEmbeddingResponseType } from '../../util/typeValidation'
+import { embeddingResponseSchema } from '../../util/typeValidation/embeddingResponse'
 
+const ajv = new Ajv()
 
-export async function getEmbeddings(text: string): Promise<number[]> {
+export async function getOpenAiEmbeddings(text: string): Promise<number[]> {
   const response = await axios.post(
     'https://api.openai.com/v1/embeddings',
     {
@@ -19,14 +21,9 @@ export async function getEmbeddings(text: string): Promise<number[]> {
       },
     }
   );
-  const responseValidity = validateEmbeddingResponseType(response)
-  if (!responseValidity.isValid) {
-    // TODO: Currently, only the first error from ajv will be captured here
-    return Promise.reject(new Error(`Invalid response from OpenAI API. AJV Error: ${responseValidity.errors[0].params}`))
+  const validate = ajv.compile(embeddingResponseSchema)
+  if (validate(response)) {
+    return response.data.data[0].embedding
   }
-
-  const embeddingsArray = response.data.data[0].embedding as number[]
-
-  return embeddingsArray;
+  return Promise.reject(new Error(`Invalid response from OpenAI API. AJV Error: ${validate.errors?.[0].message}`))
 }
-
