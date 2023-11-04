@@ -7,9 +7,9 @@ import { getEmbeddings } from '../../../server/services/openai'
 
 describe('getEmbeddings', async () => {
 
-    after(() => sinon.restore())
+    //after(() => sinon.restore())
 
-    it('happy path', () => {
+    it('happy path', async () => {
         sinon.replace(axios, 'post', sinon.fake.resolves({
             data: {
                 data: [
@@ -19,9 +19,11 @@ describe('getEmbeddings', async () => {
                 ],
             },
         }))
-      assert.equal(getEmbeddings('foo'), [1, 2, 3, 4, 5])
+
+      assert.deepEqual(await getEmbeddings('foo'), [1, 2, 3, 4, 5])
+      sinon.restore()
     })
-    it ('throws error on invalid response', () => {
+    it ('throws error on invalid response', async () => {
         sinon.replace(axios, 'post', sinon.fake.resolves({
             data: {
                 shmata: [
@@ -31,6 +33,7 @@ describe('getEmbeddings', async () => {
                 ],
             },
         }))
-      assert.throws(() => getEmbeddings('foo'))
+      assert.rejects(() => getEmbeddings('foo'))
+      sinon.restore()
     } )
   });

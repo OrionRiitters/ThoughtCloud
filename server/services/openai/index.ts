@@ -21,12 +21,12 @@ export async function getEmbeddings(text: string): Promise<number[]> {
   );
   const responseValidity = validateEmbeddingResponseType(response)
   if (!responseValidity.isValid) {
-    // TODO: Currently, only the first error from ajv will be logged here
-    throw new Error(`Invalid response from OpenAI API. AJV Error: ${responseValidity.errors[0].params}`)
+    // TODO: Currently, only the first error from ajv will be captured here
+    return Promise.reject(new Error(`Invalid response from OpenAI API. AJV Error: ${responseValidity.errors[0].params}`))
   }
 
-  // AJV has validated that the response is of the correct type
   const embeddingsArray = response.data.data[0].embedding as number[]
 
   return embeddingsArray;
 }
+
