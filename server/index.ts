@@ -4,6 +4,7 @@ import { AddressInfo } from 'node:net'
 import process from 'node:process'
 
 import { getEmbeddings } from './services/openai'
+import { setEmbeddings } from './services/redis/client'
 
 const server = fastify({ logger: true })
 
@@ -12,7 +13,8 @@ server.get('/', async (request, reply) => {
 });
 
 server.post('/embeddings', async(request, reply) => {
-    getEmbeddings("I'm stinking!")
+    const embeddings = await getEmbeddings('ooflasdfn;oawiepaowieifnawepofiujawpoeijawoeif')
+    console.log('asd' + await setEmbeddings('ooflasdfn;oawiepaowieifnawepofiujawpoeijawoeif', embeddings))
 })
 
 const start = async () => {

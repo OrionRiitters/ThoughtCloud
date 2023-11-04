@@ -16,7 +16,7 @@ const embeddingResponseSchema = {
                 type: 'array',
                 minItems: 1,
                 items: {
-                    type: {'object'},
+                    type: 'object',
                     required: ['embedding'],
                     properties: {
                         embedding: {
@@ -33,9 +33,8 @@ const embeddingResponseSchema = {
   }
 }
 
-export function validateEmbeddingResponseType(response: any): {valid: boolean, errors: ErrorObject[]|null} {
+export function validateEmbeddingResponseType(response: any): {isValid: boolean, errors: ErrorObject[]|null} {
     const validate = ajv.compile(embeddingResponseSchema)
-    const valid = validate(response)
-    return {valid, errors: validate.errors}
-
+    const isValid = validate(response)
+    return {isValid, errors: validate.errors}
 }
