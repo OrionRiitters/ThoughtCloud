@@ -5,7 +5,14 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "test": "npx glob -c \"node --import tsx --test\" \"test/**/*.test.ts\""
+    "test": "npx glob -c \"node --import tsx --test\" \"test/**/*.test.ts\"",
+    "lint": "npx eslint server/**/*.ts test/**/*.ts"
+  },
+  "prettier": {
+    "trailingComma": "none",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -20,7 +27,11 @@
   },
   "devDependencies": {
     "@types/node": "^20.8.10",
+    "@typescript-eslint/eslint-plugin": "^6.9.1",
+    "@typescript-eslint/parser": "^6.9.1",
     "dotenv": "^16.3.1",
+    "eslint": "^8.53.0",
+    "prettier": "^3.0.3",
     "sinon": "^17.0.1",
     "tsx": "^3.14.0",
     "typescript": "^5.2.2"
