@@ -3,3 +3,4 @@ scratch
 server/.env
 .next
 *.bak
+*.env
