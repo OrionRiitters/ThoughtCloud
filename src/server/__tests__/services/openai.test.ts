@@ -1,9 +1,17 @@
+// const { test, mock, describe, it, after } = require('node:test')
+// const { assert } = require('node:assert')
+// const {sinon } = require('sinon')
+// const axios = require('axios')
+
+// const { getOpenAiEmbeddings } = require('../../services/openai')
+
+
 import { test, mock, describe, it, after } from 'node:test'
 import assert from 'node:assert'
 import sinon from 'sinon'
 import axios from 'axios'
 
-import { getOpenAiEmbeddings } from '../../../server/services/openai'
+import { getOpenAiEmbeddings } from '../../services/openai'
 
 describe('getEmbeddings', async () => {
   it('happy path', async () => {

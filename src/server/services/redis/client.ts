@@ -15,7 +15,7 @@ const REDIS_HOST = process.env.REDIS_HOST ?? 'localhost'
 
 const client = createClient({
   socket: {
-    host: process.env.REDIS_HOST,
+    host: REDIS_HOST,
     port: REDIS_PORT
   }
 })
@@ -27,6 +27,14 @@ await client.connect()
 export async function setEmbeddings(
   key: string,
   embeddings: number[]
-): Promise<string | null> {
-  return client.set(`embeddings:${key}`, JSON.stringify(embeddings))
+): Promise<boolean> {
+  console.log(key)
+  return client.HSETNX(`embeddings:${key}`, 'embeddings', JSON.stringify(embeddings))
 }
+
+export async function getEmbeddings(
+    key: string,
+  ): Promise<string|undefined> {
+    return client.hGet(`embeddings:${key}`, 'embeddings')
+  }
+  

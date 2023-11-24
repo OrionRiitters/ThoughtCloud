@@ -1,0 +1,12 @@
+// babel.config.js
+{
+  "presets": [
+    "@babel/preset-typescript", 
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    ["@babel/plugin-transform-modules-commonjs", {
+      "allowTopLevelThis": true
+    }]
+  ]
+}
