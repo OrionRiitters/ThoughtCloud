@@ -8,7 +8,6 @@ export default function SignIn() {
         <div>
           <h1>Login</h1>
           <button onClick={ () => {
-            console.log('asdoliuhboiuybouiy')
             routerDispatch!({ type: 'go', path: '/home' }) }
             }>Go Home!</button>
         </div>

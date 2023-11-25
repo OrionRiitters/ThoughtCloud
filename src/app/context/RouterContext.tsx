@@ -1,8 +1,16 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { ReactNode, createContext, useContext, useReducer } from 'react';
+import childrenInjection from '../util/childrenInjection';
 
 export type Route = {
   path: string
   component: () => React.JSX.Element
+}
+
+interface RouterProviderProps {
+  children: ReactNode
+  declaredRoutes: Route[]
+  injectIndex?: number
+  defaultPath: string
 }
 interface Router {
   currentRoute: Route,
@@ -13,10 +21,10 @@ interface Router {
 
 const RouterDispatchContext = createContext<React.Dispatch<{
   type: string;
-  path: string;
+  path?: string;
 }> | null>(null)
 
-export default function RouterProvider(declaredRoutes: Route[], defaultPath='/'): React.JSX.Element{
+export default function RouterProvider({children, declaredRoutes, injectIndex=0, defaultPath='/'}: RouterProviderProps): React.JSX.Element {
   const initialState: Router = {
     // TODO: clean up the sad path here
     currentRoute: declaredRoutes.find(e => e.path === defaultPath) ?? { path: '/404', component: () => <div>404</div> },
@@ -30,20 +38,22 @@ export default function RouterProvider(declaredRoutes: Route[], defaultPath='/')
     initialState
   )
 
+  const injectedChildren = childrenInjection(children, injectIndex, <routerState.currentRoute.component />)
+
   return (
     <RouterDispatchContext.Provider value={dispatch}>
-      <routerState.currentRoute.component />
+      {injectedChildren}
     </RouterDispatchContext.Provider>
   )
 }
 
-function routerReducer(state:Router, action:{ type: string, path: string }):Router {
+function routerReducer(state:Router, action:{ type: string, path?: string }): Router {
   switch (action.type) {
     case 'go': 
       return {
         ...state,
         currentRoute: {
-          path: action.path,
+          path: action.path || state.currentRoute.path,
           component: state.routes.find(e => e.path === action.path)?.component ?? state.currentRoute.component
         }
       }
@@ -52,7 +62,7 @@ function routerReducer(state:Router, action:{ type: string, path: string }):Rout
         ...state,
         rightHistory: [state.currentRoute.path, ...state.rightHistory],
         currentRoute: {
-          path: action.path,
+          path: action.path || state.currentRoute.path,
           component: state.currentRoute.component
         }
       }
