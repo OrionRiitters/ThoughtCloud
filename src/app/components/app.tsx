@@ -1,6 +1,6 @@
 import React from "react"
 
-import RouterProvider from '../hooks/RouterContext'
+import RouterProvider from '../context/RouterContext'
 
 import routes from '../routes'
 

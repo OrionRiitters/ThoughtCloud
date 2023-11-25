@@ -4,14 +4,6 @@ export type Route = {
   path: string
   component: () => React.JSX.Element
 }
-
-type RouterAction = {
-  type: string
-  path: string
-
-}
-
-
 interface Router {
   currentRoute: Route,
   routes: Route[],
@@ -19,15 +11,10 @@ interface Router {
   rightHistory: string[]
 }
 
-
-//const RouterDispatchContext = createContext<React.Dispatch<RouterAction> | ((arg: RouterAction) => {})>( () => {console.log("ugh")} )
-const RouterDispatchContext = createContext({
-  // TODO: clean up the sad path here
-  currentRoute: { path: '/', component: () => <React.Fragment></React.Fragment> },
-  routes: [],
-  leftHistory: [],
-  rightHistory: []
-})
+const RouterDispatchContext = createContext<React.Dispatch<{
+  type: string;
+  path: string;
+}> | null>(null)
 
 export default function RouterProvider(declaredRoutes: Route[], defaultPath='/'): React.JSX.Element{
   const initialState: Router = {
@@ -38,27 +25,26 @@ export default function RouterProvider(declaredRoutes: Route[], defaultPath='/')
     rightHistory: []
   }
   
-  //const RouterContext = createContext(initialState);
-  const [router, dispatch] = useReducer(
+  const [routerState, dispatch] = useReducer(
     routerReducer,
     initialState
   )
+
   return (
     <RouterDispatchContext.Provider value={dispatch}>
-      {router.currentRoute.component()}
+      <routerState.currentRoute.component />
     </RouterDispatchContext.Provider>
   )
 }
 
 function routerReducer(state:Router, action:{ type: string, path: string }):Router {
-  console.log('hiausd')
   switch (action.type) {
     case 'go': 
       return {
         ...state,
         currentRoute: {
           path: action.path,
-          component: state.currentRoute.component
+          component: state.routes.find(e => e.path === action.path)?.component ?? state.currentRoute.component
         }
       }
     case 'goLeft':

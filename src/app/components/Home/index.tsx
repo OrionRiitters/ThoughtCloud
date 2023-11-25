@@ -1,5 +1,5 @@
 import React from "react"
-import { useRouterDispatch } from '../../hooks/RouterContext'
+import { useRouterDispatch } from '../../context/RouterContext'
 
 export default function SignIn() {
   const routerDispatch = useRouterDispatch()
@@ -7,7 +7,7 @@ export default function SignIn() {
       <React.Fragment>
         <div>
           <h1>Homey</h1>
-          <button onClick={ () => routerDispatch({ type: 'go', path: '/signin' }) }>Go sign in!</button>
+          <button onClick={ () => routerDispatch!({ type: 'go', path: '/signin' }) }>Go sign in!</button>
         </div>
       </React.Fragment>
     )
