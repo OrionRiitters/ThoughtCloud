@@ -24,6 +24,8 @@ const RouterDispatchContext = createContext<React.Dispatch<{
   path?: string;
 }> | null>(null)
 
+const RouterContext = createContext<Router | null>(null)
+
 export default function RouterProvider({children, declaredRoutes, injectIndex=0, defaultPath='/'}: RouterProviderProps): React.JSX.Element {
   const initialState: Router = {
     // TODO: clean up the sad path here
@@ -41,9 +43,11 @@ export default function RouterProvider({children, declaredRoutes, injectIndex=0,
   const injectedChildren = childrenInjection(children, injectIndex, <routerState.currentRoute.component />)
 
   return (
-    <RouterDispatchContext.Provider value={dispatch}>
-      {injectedChildren}
-    </RouterDispatchContext.Provider>
+    <RouterContext.Provider value={routerState}>
+      <RouterDispatchContext.Provider value={dispatch}>
+        {injectedChildren}
+      </RouterDispatchContext.Provider>
+    </RouterContext.Provider>
   )
 }
 
@@ -80,4 +84,9 @@ function routerReducer(state:Router, action:{ type: string, path?: string }): Ro
 
 export function useRouterDispatch() {
   return useContext(RouterDispatchContext);
+}
+
+
+export function useRouter() {
+  return useContext(RouterContext);
 }
