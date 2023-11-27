@@ -7,7 +7,7 @@
   "scripts": {
     "test": "npx glob -c \"node --import tsx --test\" \"src/server/__tests__/**/*.test.ts{,x}\"",
     "lint": "npx eslint server/**/*.ts test/**/*.ts",
-    "start:app": "npx webpack serve",
+    "start:app": "npx webpack serve -writeToDisk",
     "jest": "jest ./src/app/__tests__/**/*.test.tsx",
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
@@ -49,6 +49,7 @@
     "@typescript-eslint/parser": "^6.9.1",
     "@webpack-cli/generators": "^3.0.7",
     "babel-loader": "^9.1.3",
+    "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.8.1",
     "dotenv": "^16.3.1",
     "eslint": "^8.53.0",

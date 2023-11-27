@@ -5,7 +5,7 @@ import './signin.scss'
 
 export default function SignIn() {
   const routerDispatch = useRouterDispatch()
-  const [micStream, setMicStream] = useState<MediaStream|null>(null)
+  //const [micStream, setMicStream] = useState<MediaStream|null>(null)
   const [isRecording, setIsRecording] = useState(false)
   const [audioSource, setAudioSource] = useState<MediaStreamAudioSourceNode|null>(null)
   const [audioContext, setAudioContext] = useState(new window.AudioContext())
@@ -17,15 +17,8 @@ export default function SignIn() {
       const audioSource = audioContext.createMediaStreamSource(micStream)
       setAudioSource(audioSource)
 
-      //const playStream = new MediaStream()
-      //const audioSource = audioContext.createMediaStreamSource(stream)
-      // if (mediaDevices) {
-      //   setMediaRecorder(new MediaRecorder(micStream))
-      // }
+     // await audioContext.audioWorklet.addModule('../../util/audio-worklet-stream-to-buffer.js');
 
-
-
-      //track.connect(audioContext.destination);
     })()
   }, [])
 
@@ -37,22 +30,6 @@ export default function SignIn() {
      audioSource?.disconnect(audioContext.destination)
     }
   }, [isRecording])
-
-  // useEffect(() => {
-  //   if (mediaRecorder) {
-  //     mediaRecorder.addEventListener('dataavailable', ({ data }) => {
-  //       console.log(data.type)
-  //       if (isRecording) {
-  //         return data
-  //       }
-  //       else {
-  //         return new Blob()
-  //       }
-  //     });
-  //     mediaRecorder.start();
-  //   }
-  // }, [mediaRecorder])
-
 
     return (
       <React.Fragment>

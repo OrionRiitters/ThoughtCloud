@@ -1,10 +1,11 @@
 import path, { dirname } from 'path'
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'url'
 
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 
-const isProduction = process.env.NODE_ENV == 'production';
+const isProduction = process.env.NODE_ENV == 'production'
 
 
 const stylesHandler = MiniCssExtractPlugin.loader;
@@ -25,6 +26,11 @@ const config = {
         }),
 
         new MiniCssExtractPlugin(),
+        new CopyWebpackPlugin({
+            patterns: [
+              { from: './src/app/util/audio-worklet-stream-to-buffer.js', to: 'dist' },
+            ],
+          }),
     ],
     module: {
         rules: [
